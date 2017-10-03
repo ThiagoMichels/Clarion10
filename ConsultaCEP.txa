@@ -1,0 +1,514 @@
+[PROCEDURE]
+NAME ConsultaCEPWeb
+PROTOTYPE '(LONG P:CEP,<<*STRING P:LOGRADOURO>,<<*STRING P:COMPLEMENTO>,<<*STRING P:BAIRRO>,<<*STRING P:LOCALIDADE>,<<*STRING P:UF>,<<*STRING P:IBGE>)'
+PARAMETERS '(LONG P:CEP,<<*STRING P:LOGRADOURO>,<<*STRING P:COMPLEMENTO>,<<*STRING P:BAIRRO>,<<*STRING P:LOCALIDADE>,<<*STRING P:UF>,<<*STRING P:IBGE>)'
+GLOBAL
+[COMMON]
+DESCRIPTION 'Source'
+FROM ABC Source
+CATEGORY 'Source'
+MODIFIED '2017/10/03' '10:51:00'
+[DATA]
+[SCREENCONTROLS]
+! PROMPT('L : TAMANHO:'),USE(?TAMANHO:Prompt)
+! ENTRY(@n-14),USE(TAMANHO),RIGHT(1),MSG('Guarda o Len da string de entrada'),TIP('Guarda o Len da string de entrada')
+[REPORTCONTROLS]
+! STRING(@n-14),USE(TAMANHO),RIGHT(1)
+L:TAMANHO                LONG !Guarda o Len da string de entrada
+!!> GUID('f1b6776c-ed4b-4ce7-8de4-f57c7a8e66a2'),PROMPT('L : TAMANHO:'),HEADER('L : TAMANHO'),MESSAGE('Guarda o Len da string de entrada'),TOOLTIP('Guarda o Len da string de entrada'),PICTURE(@n-14),JUSTIFY(RIGHT,1)
+[SCREENCONTROLS]
+! PROMPT('arq : LINHA:'),USE(?arq:LINHA:Prompt)
+! ENTRY(@s255),USE(arq:LINHA)
+[REPORTCONTROLS]
+! STRING(@s255),USE(arq:LINHA)
+arq:LINHA                STRING(99999)
+!!> GUID('42ff2561-b0bf-46e8-9db7-e219fd06ffff'),PROMPT('arq : LINHA:'),HEADER('arq : LINHA'),PICTURE(@s255),TYPEMODE(INS)
+[PROMPTS]
+%ButtonAction DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRunName DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRunParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ButtonThread DEPEND %Control LONG TIMES 0
+
+%ButtonThreadStack DEPEND %Control DEFAULT TIMES 0
+
+%ButtonParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonRequest DEPEND %Control DEFAULT TIMES 0
+
+%PreLookupKey DEPEND %Control KEY TIMES 0
+
+%PreLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PreLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%PostLookupKey DEPEND %Control KEY TIMES 0
+
+%PostLookupField DEPEND %Control COMPONENT TIMES 0
+
+%PostLookupProcedure DEPEND %Control PROCEDURE TIMES 0
+
+%ForceWindowRefresh DEPEND %Control LONG TIMES 0
+
+%ClassItem UNIQUE DEFAULT  ('Default', 'WindowToolbar')
+%DefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('WindowManager')
+WHEN  ('WindowToolbar') ('ToolbarClass')
+
+%ActualDefaultBaseClassType DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('')
+WHEN  ('WindowToolbar') ('')
+
+%ClassLines DEPEND %ClassItem MULTI DEFAULT TIMES 0
+
+%ReturnValue FIELD  ()
+%ProcedureOneInstance LONG  (0)
+%WindowOperationMode DEFAULT  ('Use WINDOW setting')
+%INISaveWindow LONG  (1)
+%ProcedureDisableEnhanceFocus LONG  (0)
+%ProcedureUseEnterInsteadTabOverride LONG  (0)
+%WindowUseEnterInsteadTab LONG  (1)
+%ProcedureUseEnterInsteadTabExcludeListCombo LONG  (0)
+%ProcedureUseEnterInsteadTabEnableNextTabStop LONG  (0)
+%ProcedureUseEnterInsteadTabExcludeG LONG  (1)
+%WindowUseEnterInsteadTabExclude MULTI DEFAULT  ()
+%GlobalObject DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('NO')
+WHEN  ('WindowToolbar') ('NO')
+
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('ThisWindow')
+WHEN  ('WindowToolbar') ('Toolbar')
+
+%UseDefaultABCBaseClass DEPEND %ClassItem LONG TIMES 2
+WHEN  ('Default') (1)
+WHEN  ('WindowToolbar') (1)
+
+%UseABCBaseClass DEPEND %ClassItem LONG TIMES 2
+WHEN  ('Default') (1)
+WHEN  ('WindowToolbar') (1)
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 2
+WHEN  ('Default') ('ADOBlob')
+WHEN  ('WindowToolbar') ('ADOBlob')
+
+%ExtBaseClass DEPEND %ClassItem DEFAULT TIMES 0
+
+%BaseClassIncludeFile DEPEND %ClassItem DEFAULT TIMES 0
+
+%DeriveFromBaseClass DEPEND %ClassItem LONG TIMES 2
+WHEN  ('Default') (0)
+WHEN  ('WindowToolbar') (0)
+
+%NewMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewMethodName DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewMethodPrototype DEPEND %NewMethods DEFAULT TIMES 0
+
+%NewClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%NewClassProperty DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataType DEPEND %NewClassPropertyItems DEFAULT TIMES 1
+WHEN  ('WindowToolbar')TIMES 0
+
+%NewClassOtherType DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataIsRef DEPEND %NewClassPropertyItems LONG TIMES 0
+
+%NewClassDataSize DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim1 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim2 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim3 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%NewClassDataDim4 DEPEND %NewClassPropertyItems DEFAULT TIMES 0
+
+%ClassMethods DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassMethodName DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassMethodPrototype DEPEND %ClassMethods DEFAULT TIMES 0
+
+%ClassPropertyItems DEPEND %ClassItem MULTI LONG TIMES 0
+
+%ClassProperty DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataType DEPEND %ClassPropertyItems DEFAULT TIMES 1
+WHEN  ('WindowToolbar')TIMES 0
+
+%ClassOtherType DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataIsRef DEPEND %ClassPropertyItems LONG TIMES 0
+
+%ClassDataSize DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim1 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim2 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim3 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%ClassDataDim4 DEPEND %ClassPropertyItems DEFAULT TIMES 0
+
+%WindowStyles MULTI LONG  ()
+%WindowStyleFontName DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontNameIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontSize DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontSizeIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontStyle DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontStyleIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleFontColor DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleFontCharSet DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormal DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundNormalVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundNormalIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleForegroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleForegroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelected DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleBackgroundSelectedVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStyleBackgroundSelectedIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStylePicture DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureVariable DEPEND %WindowStyles DEFAULT TIMES 0
+
+%WindowStylePictureIsVariable DEPEND %WindowStyles LONG TIMES 0
+
+%WindowStyleOtherListboxes MULTI DEFAULT  ()
+%ProcedureAutoBindFields MULTI LONG  ()
+%ProcedureAutoBindField DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldTPL DEPEND %ProcedureAutoBindFields DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedures MULTI LONG  ()
+%ProcedureAutoBindProcedure DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindProcedureTPL DEPEND %ProcedureAutoBindProcedures DEFAULT TIMES 0
+
+%ProcedureAutoBindFieldsIgnored MULTI LONG  ()
+%ProcedureAutoBindFieldIgnored DEPEND %ProcedureAutoBindFieldsIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindProceduresIgnored MULTI LONG  ()
+%ProcedureAutoBindProcedureIgnored DEPEND %ProcedureAutoBindProceduresIgnored DEFAULT TIMES 0
+
+%ProcedureAutoBindValidToAddField LONG  (0)
+%ProcedureUserBindFields MULTI LONG  ()
+%ProcedureUserBindField DEPEND %ProcedureUserBindFields FIELD TIMES 0
+
+%ProcedureAutoBindFieldIgnore DEPEND %ProcedureAutoBindFields LONG TIMES 0
+
+%ProcedureUserBindProcedures MULTI LONG  ()
+%ProcedureUserBindProcedure DEPEND %ProcedureUserBindProcedures PROCEDURE TIMES 0
+
+%ProcedureAutoBindProcedureIgnore DEPEND %ProcedureAutoBindProcedures LONG TIMES 0
+
+%ProcedureUserBindExpressions MULTI LONG  ()
+%ProcedureUserBindExpressionName DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ProcedureUserBindExpression DEPEND %ProcedureUserBindExpressions DEFAULT TIMES 0
+
+%ExtUITabIcon DEPEND %Control DEFAULT TIMES 0
+
+%ExtUITabStyleOverrideGlobal DEPEND %Control LONG TIMES 0
+
+%ExtUITabStyle DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorType DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorTypeVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorTypeIsVariable DEPEND %Control LONG TIMES 0
+
+%FieldGradientColorFrom DEPEND %Control LONG TIMES 0
+
+%FieldGradientColorFromVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorFromIsVariable DEPEND %Control LONG TIMES 0
+
+%FieldGradientColorTo DEPEND %Control LONG TIMES 0
+
+%FieldGradientColorToVariable DEPEND %Control DEFAULT TIMES 0
+
+%FieldGradientColorToIsVariable DEPEND %Control LONG TIMES 0
+
+%ButtonReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%ButtonReturnValueReferenceAssign DEPEND %Control LONG TIMES 0
+
+%ButtonThreadParameters DEPEND %Control DEFAULT TIMES 0
+
+%ButtonThreadReturnValueAssignment DEPEND %Control FIELD TIMES 0
+
+%PreLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupProcedureParameters DEPEND %Control DEFAULT TIMES 0
+
+%PostLookupDuringValidate DEPEND %Control LONG TIMES 0
+
+%LookupAssign DEPEND %Control MULTI LONG TIMES 0
+
+%MoreTarget DEPEND %LookupAssign FIELD TIMES 0
+
+%MoreField DEPEND %LookupAssign DEFAULT TIMES 0
+
+%CheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedAssignVariable DEPEND %CheckedAssigns FIELD TIMES 0
+
+%CheckedAssignValue DEPEND %CheckedAssigns DEFAULT TIMES 0
+
+%CheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedControlAction DEPEND %CheckedHides DEFAULT TIMES 0
+
+%CheckedEnables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedControl1 DEPEND %CheckedEnables DEFAULT TIMES 0
+
+%CheckedControl1Action DEPEND %CheckedEnables DEFAULT TIMES 0
+
+%UncheckedAssigns DEPEND %Control MULTI LONG TIMES 0
+
+%UncheckedAssignVariable DEPEND %UncheckedAssigns FIELD TIMES 0
+
+%UncheckedAssignValue DEPEND %UncheckedAssigns DEFAULT TIMES 0
+
+%UnCheckedHides DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedControlAction DEPEND %UnCheckedHides DEFAULT TIMES 0
+
+%UnCheckedEnables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedControl1 DEPEND %UnCheckedEnables DEFAULT TIMES 0
+
+%UnCheckedControl1Action DEPEND %UnCheckedEnables DEFAULT TIMES 0
+
+%CheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%CheckedDisableControl DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%CheckedDisableControlAction DEPEND %CheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisables DEPEND %Control MULTI LONG TIMES 0
+
+%UnCheckedDisableControl DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%UnCheckedDisableControlAction DEPEND %UnCheckedDisables DEFAULT TIMES 0
+
+%ITHasDllTemplate DEFAULT  ('')
+%GenerateOpenClose LONG  (0)
+%GenerateSaveRestore LONG  (0)
+[EMBED]
+EMBED %LocalDataAfterClasses
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+                    MAP
+BuscaDadosRequest       PROCEDURE()
+                    END
+
+[END]
+EMBED %ProcedureRoutines
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+RetiraAcento        ROUTINE
+    L:TAMANHO = len(clip(arq:LINHA))
+     loop pos# = 1 to L:TAMANHO by 1 
+        !Acento Til    
+        if sub(arq:LINHA,POS#,1) = 'Ã'
+            arq:LINHA[POS#] = 'A'
+        elsif sub(arq:LINHA,POS#,1) = 'Õ'
+            arq:LINHA[POS#] = 'O'        
+        elsif sub(arq:LINHA,POS#,1) = 'ã'
+            arq:LINHA[POS#] = 'a'
+        elsif sub(arq:LINHA,POS#,1) = 'õ'
+            arq:LINHA[POS#] = 'o'
+        !Acento cincunflexo
+        elsif sub(arq:LINHA,POS#,1) = 'Â'
+            arq:LINHA[POS#] = 'A'
+        elsif sub(arq:LINHA,POS#,1) = 'Ê'
+            arq:LINHA[POS#] = 'E'        
+        elsif sub(arq:LINHA,POS#,1) = 'Î'
+            arq:LINHA[POS#] = 'I'
+        elsif sub(arq:LINHA,POS#,1) = 'Ô'
+            arq:LINHA[POS#] = 'O'        
+        elsif sub(arq:LINHA,POS#,1) = 'Û'
+            arq:LINHA[POS#] = 'U'
+        elsif sub(arq:LINHA,POS#,1) = 'â'
+            arq:LINHA[POS#] = 'a'
+        elsif sub(arq:LINHA,POS#,1) = 'ê'
+            arq:LINHA[POS#] = 'e'
+        elsif sub(arq:LINHA,POS#,1) = 'î'
+            arq:LINHA[POS#] = 'i'
+        elsif sub(arq:LINHA,POS#,1) = 'ô'
+            arq:LINHA[POS#] = 'o'
+        elsif sub(arq:LINHA,POS#,1) = 'û'
+            arq:LINHA[POS#] = 'u'
+        !Acento Agudo    
+        elsif sub(arq:LINHA,POS#,1) = 'Á'
+            arq:LINHA[POS#] = 'A'
+        elsif sub(arq:LINHA,POS#,1) = 'É'
+            arq:LINHA[POS#] = 'E'
+        elsif sub(arq:LINHA,POS#,1) = 'Í'
+            arq:LINHA[POS#] = 'I'
+        elsif sub(arq:LINHA,POS#,1) = 'Ó'
+            arq:LINHA[POS#] = 'O'
+        elsif sub(arq:LINHA,POS#,1) = 'Ú'
+            arq:LINHA[POS#] = 'U'
+        elsif sub(arq:LINHA,POS#,1) = 'á'
+            arq:LINHA[POS#] = 'a'
+        elsif sub(arq:LINHA,POS#,1) = 'é'
+            arq:LINHA[POS#] = 'e'
+        elsif sub(arq:LINHA,POS#,1) = 'í'
+            arq:LINHA[POS#] = 'i'
+        elsif sub(arq:LINHA,POS#,1) = 'ó'
+            arq:LINHA[POS#] = 'o'
+        elsif sub(arq:LINHA,POS#,1) = 'ú'
+            arq:LINHA[POS#] = 'u'      
+        !Acento Crase
+        elsif sub(arq:LINHA,POS#,1) = 'À'
+            arq:LINHA[POS#] = 'A'
+        elsif sub(arq:LINHA,POS#,1) = 'È'
+            arq:LINHA[POS#] = 'E'
+        elsif sub(arq:LINHA,POS#,1) = 'Ì'
+            arq:LINHA[POS#] = 'I'
+        elsif sub(arq:LINHA,POS#,1) = 'Ò'
+            arq:LINHA[POS#] = 'O'
+        elsif sub(arq:LINHA,POS#,1) = 'Ù'
+            arq:LINHA[POS#] = 'U'
+        elsif sub(arq:LINHA,POS#,1) = 'à'
+            arq:LINHA[POS#] = 'a'
+        elsif sub(arq:LINHA,POS#,1) = 'è'
+            arq:LINHA[POS#] = 'e'
+        elsif sub(arq:LINHA,POS#,1) = 'ì'
+            arq:LINHA[POS#] = 'i'
+        elsif sub(arq:LINHA,POS#,1) = 'ò'
+            arq:LINHA[POS#] = 'o'
+        elsif sub(arq:LINHA,POS#,1) = 'ù'
+            arq:LINHA[POS#] = 'u'
+        !Especiais
+        elsif sub(arq:LINHA,POS#,1) = 'Ü'
+            arq:LINHA[POS#] = 'U'            
+        elsif sub(arq:LINHA,POS#,1) = 'ü'
+            arq:LINHA[POS#] = 'u'
+        elsif sub(arq:LINHA,POS#,1) = 'Ñ'
+            arq:LINHA[POS#] = 'N'        
+        elsif sub(arq:LINHA,POS#,1) = 'ñ'
+            arq:LINHA[POS#] = 'n'
+        elsif sub(arq:LINHA,POS#,1) = 'Ç'
+            arq:LINHA[POS#] = 'C'
+        elsif sub(arq:LINHA,POS#,1) = 'ç'
+            arq:LINHA[POS#] = 'c'        
+        END        
+     end
+[END]
+EMBED %ProcessedCode
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+    !!!!!!Desenvolvido por Thiago Vicente Michels!!!!!!!!!!!!!
+    SETCURSOR(CURSOR:Wait)
+    BuscaDadosRequest()    
+    SETCURSOR()
+[END]
+EMBED %LocalProcedures
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 4000
+PROPERTY:END
+BuscaDadosRequest   PROCEDURE()
+JSON                    JSONDataClass
+ClaTlk                  ClaRunExtClass
+retVal                  LONG
+httpWebAddress          CSTRING(6400)
+httpVerbMethod          BYTE
+postData                CSTRING(1024)
+requestParameters       CSTRING(512)
+responseOut             CSTRING(64000)
+headers                 CSTRING(512)
+contentType             CSTRING(512)
+filetoStore             CSTRING(512)
+Dados                   GROUP
+cep                         LONG
+logradouro                  CSTRING(100)
+complemento                 CSTRING(100)
+bairro                      CSTRING(100)
+localidade                  CSTRING(100)
+uf                          STRING(2)
+unidade                     CSTRING(100)
+ibge                        LONG
+gia                         CSTRING(100)
+                        END
+CODE 
+    requestParameters = ''                                             
+    httpVerbMethod = HttpVerb:GET
+    headers = ''
+    contentType = 'application/json'
+    postData = ''           
+    httpWebAddress = 'https://viacep.com.br/ws/'&P:CEP&'/json'
+    retVal = ClaTlk.HttpWebRequest(httpWebAddress,httpVerbMethod,postData,requestParameters, contentType, headers, responseOut)
+    IF LEN(CLIP(responseOut)) > 0        
+        JSON.FromJSON(responseOut,Dados) !! Carrega os dados do json na queue Dados
+        !! Descarrega os dados da queue para as variáveis recebidas por parâmetro como ponteiro.
+        P:LOGRADOURO  = Dados.logradouro
+        P:COMPLEMENTO = Dados.complemento
+        P:BAIRRO      = Dados.bairro
+        arq:LINHA = Dados.localidade
+        DO RetiraAcento  !!Rotina para retirar os acentos
+        P:LOCALIDADE  = CLIP(arq:LINHA) 
+        P:UF          = Dados.uf
+        P:IBGE        = Dados.ibge
+    END
+[END]
+[END]
+[CALLS]
+ConsultaCEPWebAntigo
