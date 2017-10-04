@@ -1,4 +1,4 @@
-Para utilizar deve estar declarado no AfterClobalIncludes dentro do GlobalEmbeds
+Para utilizar deve estar declarado no AfterGlobalIncludes dentro do GlobalEmbeds
 
     INCLUDE('ClaRunExt.INC'),ONCE
     INCLUDE('JSON.INC'),ONCE
